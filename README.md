@@ -1,2 +1,2 @@
 # backend
-PNU-Capstone-Tree Backend Repository 입니다.
+PNU-Tree Backend Repository 입니다.
