@@ -1,9 +1,41 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/tree
-    username: root
+#    player-db:
+    url: jdbc:postgresql://localhost:5432/player_db
+    username: tree
     password: 1234
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: org.postgresql.Driver
+#    inventory-db:
+#      url: jdbc:postgresql://localhost:5432/inventory_db
+#      username: tree
+#      password: 1234
+#      driver-class-name: org.postgresql.Driver
+#    item-db:
+#      url: jdbc:postgresql://localhost:5432/item_db
+#      username: tree
+#      password: 1234
+#      driver-class-name: org.postgresql.Driver
+#    stage-db:
+#      url: jdbc:postgresql://localhost:5432/stage_db
+#      username: tree
+#      password: 1234
+#      driver-class-name: org.postgresql.Driver
+#    battle-db:
+#      url: jdbc:postgresql://localhost:5432/battle_db
+#      username: tree
+#      password: 1234
+#      driver-class-name: org.postgresql.Driver
+#    monster-db:
+#      url: jdbc:postgresql://localhost:5432/monster_db
+#      username: tree
+#      password: 1234
+#      driver-class-name: org.postgresql.Driver
+#    character-db:
+#      url: jdbc:postgresql://localhost:5432/character_db
+#      username: tree
+#      password: 1234
+#      driver-class-name: org.postgresql.Driver
+
   sql:
     init:
       mode: always
@@ -13,5 +45,5 @@ spring:
     properties:
       hibernate:
         format_sql: true
-        dialect: org.hibernate.dialect.MySQL8Dialect
+        dialect: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
