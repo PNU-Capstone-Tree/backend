@@ -18,7 +18,7 @@ import static io.r2dbc.spi.ConnectionFactoryOptions.*;
 
 @Configuration
 @EnableR2dbcRepositories(
-        basePackages = "com.tree.tree.ranking",
+        basePackages = "com.tree.tree.ranking.repository",
         entityOperationsRef = "rankingR2dbcEntityTemplate"
 )
 public class RankingDBConfig {

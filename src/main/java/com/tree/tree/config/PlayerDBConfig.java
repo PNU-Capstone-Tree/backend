@@ -18,7 +18,7 @@ import static io.r2dbc.spi.ConnectionFactoryOptions.*;
 
 @Configuration
 @EnableR2dbcRepositories(
-        basePackages = "com.tree.tree.player",
+        basePackages = "com.tree.tree.player.repository",
         entityOperationsRef = "playerR2dbcEntityTemplate"
 )
 public class PlayerDBConfig {
