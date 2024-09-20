@@ -5,6 +5,7 @@ import io.r2dbc.pool.ConnectionPoolConfiguration;
 import io.r2dbc.spi.ConnectionFactories;
 import io.r2dbc.spi.ConnectionFactory;
 import io.r2dbc.spi.ConnectionFactoryOptions;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -66,7 +67,7 @@ public class RankingDBConfig {
     }
 
     @Bean
-    public R2dbcEntityTemplate rankingR2dbcEntityTemplate(ConnectionFactory rankingDataSource) {
+    public R2dbcEntityTemplate rankingR2dbcEntityTemplate(@Qualifier("rankingDataSource") ConnectionFactory rankingDataSource) {
         return new R2dbcEntityTemplate(rankingDataSource);
     }
 }
