@@ -1,20 +1,13 @@
 package com.tree.tree.config;
 
-import io.r2dbc.pool.ConnectionPool;
-import io.r2dbc.pool.ConnectionPoolConfiguration;
-import io.r2dbc.spi.ConnectionFactories;
 import io.r2dbc.spi.ConnectionFactory;
-import io.r2dbc.spi.ConnectionFactoryOptions;
-import org.springframework.beans.factory.annotation.Qualifier;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
-
-import java.time.Duration;
-
-import static io.r2dbc.spi.ConnectionFactoryOptions.*;
 
 @Configuration
 @EnableR2dbcRepositories(
@@ -44,26 +37,15 @@ public class PlayerDBConfig {
     @Value("${spring.r2dbc.pool.initial-size:2}")
     private int initialSize;
 
+    private final R2dbcConfig r2dbcConfig;
+
+    public PlayerDBConfig(R2dbcConfig r2dbcConfig) {
+        this.r2dbcConfig = r2dbcConfig;
+    }
+
     @Bean
     public ConnectionFactory playerDataSource() {
-        ConnectionFactoryOptions baseOptions = ConnectionFactoryOptions.builder()
-                .option(DRIVER, "postgresql")
-                .option(HOST, host)
-                .option(PORT, port)
-                .option(DATABASE, database)
-                .option(USER, username)
-                .option(PASSWORD, password)
-                .build();
-
-        ConnectionFactory connectionFactory = ConnectionFactories.get(baseOptions);
-
-        ConnectionPoolConfiguration poolConfig = ConnectionPoolConfiguration.builder(connectionFactory)
-                .maxIdleTime(Duration.ofMinutes(30))
-                .maxSize(maxSize)
-                .initialSize(initialSize)
-                .build();
-
-        return new ConnectionPool(poolConfig);
+        return r2dbcConfig.createConnectionFactory(host, port, database, username, password, maxSize, initialSize);
     }
 
     @Bean
