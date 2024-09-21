@@ -29,12 +29,11 @@ public class Ranking extends BaseEntity {
     @NotNull
     private Boolean isDeleted;
 
-    @Builder
-    private Ranking(@NotNull final Long maxScore, @NotNull final Long rankNumber, @NotNull final Long playerId,
-                    @NotNull final Boolean isDeleted) {
+    @Builder(toBuilder = true)
+    private Ranking(@NotNull final Long maxScore, @NotNull final Long rankNumber, @NotNull final Long playerId) {
         this.maxScore = maxScore;
         this.rankNumber = rankNumber;
         this.playerId = playerId;
-        this.isDeleted = isDeleted;
+        this.isDeleted = false;
     }
 }
