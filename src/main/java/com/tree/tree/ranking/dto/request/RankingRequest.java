@@ -1,0 +1,17 @@
+package com.tree.tree.ranking.dto.request;
+
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
+public class RankingRequest {
+    @NotNull(message = "닉네임을 입력해주세요.")
+    private String nickName;
+
+    @NotNull(message = "점수를 입력해주세요.")
+    @Positive
+    private Long maxScore;
+}

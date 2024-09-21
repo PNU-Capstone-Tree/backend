@@ -7,4 +7,5 @@ import reactor.core.publisher.Flux;
 
 public interface RankingRepository extends ReactiveCrudRepository<Ranking, Long> {
     Flux<Ranking> findAllByOrderByRankNumberAsc(Pageable pageable);
+    Flux<Ranking> findAllByOrderByMaxScoreDesc();
 }
