@@ -45,7 +45,8 @@ public class RankingController {
 
     @PutMapping("/{playerId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public Mono<Void> updateRanking(@PathVariable final Long playerId,
+    //todo: 임시. parameter 오류 해결 필요
+    public Mono<Void> updateRanking(@PathVariable("playerId") final Long playerId,
                                     @RequestBody @Valid final RankingUpdateRequest request) {
         return rankingService.updateRanking(playerId, request);
     }
