@@ -48,6 +48,13 @@ public class RankingService {
                 .then(reassignRankNumbers());
     }
 
+    public Mono<Void> deleteRanking(final Long playerId) {
+        return rankingRepository.findByPlayerId(playerId)
+                .switchIfEmpty(Mono.error(new RuntimeException("랭킹을 찾을 수 없습니다: " + playerId)))
+                .flatMap(rankingRepository::delete)
+                .then(reassignRankNumbers());
+    }
+
     private Mono<Void> reassignRankNumbers() {
         return rankingRepository.findAllByOrderByMaxScoreDesc()
                 .filter(ranking -> !ranking.getIsDeleted())
