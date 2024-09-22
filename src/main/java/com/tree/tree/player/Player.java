@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 @Getter
@@ -22,9 +23,11 @@ public class Player extends BaseEntity {
     private String password;
 
     @NotNull
+    @Column("nickname")
     private String nickName;
 
     @NotNull
+    @Column("is_deleted")
     private Boolean isDeleted;
 
     @Builder
