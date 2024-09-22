@@ -37,7 +37,7 @@ public class RankingController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono<Void> createRanking(@RequestBody @Valid RankingCreateRequest rankingRequest) {
+    public Mono<Void> createRanking(@RequestBody @Valid final RankingCreateRequest rankingRequest) {
         return rankingService.createRanking(rankingRequest);
     }
 

@@ -24,7 +24,7 @@ public class RankingService {
                 );
     }
 
-    public Mono<Void> createRanking(RankingCreateRequest rankingRequest) {
+    public Mono<Void> createRanking(final RankingCreateRequest rankingRequest) {
         return playerRepository.findByNickName(rankingRequest.getNickName())
                 //todo: error 처리
                 .switchIfEmpty(Mono.error(new RuntimeException("플레이어를 찾을 수 없습니다: " + rankingRequest.getNickName())))
