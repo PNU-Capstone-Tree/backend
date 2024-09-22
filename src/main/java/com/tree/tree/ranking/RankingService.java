@@ -2,6 +2,7 @@ package com.tree.tree.ranking;
 
 import com.tree.tree.player.repository.PlayerRepository;
 import com.tree.tree.ranking.dto.request.RankingCreateRequest;
+import com.tree.tree.ranking.dto.request.RankingUpdateRequest;
 import com.tree.tree.ranking.dto.response.RankingResponse;
 import com.tree.tree.ranking.repository.RankingRepository;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,18 @@ public class RankingService {
                         .rankNumber(0L) // 임시값 넣음
                         .build()))
                 .then(reassignRankNumbers()); // rankNumber 재부여
+    }
+
+    public Mono<Void> updateRanking(final Long playerId, final RankingUpdateRequest request) {
+        return playerRepository.findById(playerId)
+                //todo: error 처리
+                .switchIfEmpty(Mono.error(new RuntimeException("플레이어를 찾을 수 없습니다: " + playerId)))
+                .flatMap(player -> rankingRepository.findByPlayerId(playerId)
+                        .switchIfEmpty(Mono.error(new RuntimeException("랭킹을 찾을 수 없습니다: " + playerId)))
+                        .flatMap(ranking -> rankingRepository.save(ranking.toBuilder()
+                                    .maxScore(request.getMaxScore())
+                                    .build())))
+                .then(reassignRankNumbers());
     }
 
     private Mono<Void> reassignRankNumbers() {
