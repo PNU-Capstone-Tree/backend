@@ -30,6 +30,7 @@ public class RankingController {
     private final RankingService rankingService;
 
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public Flux<RankingResponse> getAllRankings(
             @RequestParam(defaultValue = "0") @PositiveOrZero final int page,
             @RequestParam(defaultValue = "10") @PositiveOrZero final int size) {
