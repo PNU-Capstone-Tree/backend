@@ -1,7 +1,7 @@
 package com.tree.tree.ranking;
 
 import com.tree.tree.player.repository.PlayerRepository;
-import com.tree.tree.ranking.dto.request.RankingRequest;
+import com.tree.tree.ranking.dto.request.RankingCreateRequest;
 import com.tree.tree.ranking.dto.response.RankingResponse;
 import com.tree.tree.ranking.repository.RankingRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ public class RankingService {
                 );
     }
 
-    public Mono<Void> createRanking(RankingRequest rankingRequest) {
+    public Mono<Void> createRanking(RankingCreateRequest rankingRequest) {
         return playerRepository.findByNickName(rankingRequest.getNickName())
                 //todo: error 처리
                 .switchIfEmpty(Mono.error(new RuntimeException("플레이어를 찾을 수 없습니다: " + rankingRequest.getNickName())))

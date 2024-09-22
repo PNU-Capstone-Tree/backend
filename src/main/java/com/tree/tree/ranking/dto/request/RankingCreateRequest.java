@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class RankingRequest {
+public class RankingCreateRequest {
     @NotNull(message = "닉네임을 입력해주세요.")
     private String nickName;
 

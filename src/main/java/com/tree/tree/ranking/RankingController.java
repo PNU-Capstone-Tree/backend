@@ -1,6 +1,6 @@
 package com.tree.tree.ranking;
 
-import com.tree.tree.ranking.dto.request.RankingRequest;
+import com.tree.tree.ranking.dto.request.RankingCreateRequest;
 import com.tree.tree.ranking.dto.response.RankingResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -34,7 +34,7 @@ public class RankingController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono<Void> createRanking(@RequestBody @Valid RankingRequest rankingRequest) {
+    public Mono<Void> createRanking(@RequestBody @Valid RankingCreateRequest rankingRequest) {
         return rankingService.createRanking(rankingRequest);
     }
 }
