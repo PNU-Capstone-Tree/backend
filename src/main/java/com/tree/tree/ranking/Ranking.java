@@ -3,9 +3,9 @@ package com.tree.tree.ranking;
 import com.tree.tree.config.BaseEntity;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
@@ -13,6 +13,7 @@ import org.springframework.data.relational.core.mapping.Table;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table("ranking")
+@SuperBuilder(toBuilder = true)
 public class Ranking extends BaseEntity {
 
     @Id
@@ -33,12 +34,4 @@ public class Ranking extends BaseEntity {
     @NotNull
     @Column("is_deleted")
     private Boolean isDeleted;
-
-    @Builder(toBuilder = true)
-    private Ranking(@NotNull final Long maxScore, @NotNull final Long rankNumber, @NotNull final Long playerId) {
-        this.maxScore = maxScore;
-        this.rankNumber = rankNumber;
-        this.playerId = playerId;
-        this.isDeleted = false;
-    }
 }

@@ -38,7 +38,6 @@ public class RankingService {
 
     public Mono<Void> updateRanking(final Long playerId, final RankingUpdateRequest request) {
         return playerRepository.findById(playerId)
-                //todo: error 처리
                 .switchIfEmpty(Mono.error(new RuntimeException("플레이어를 찾을 수 없습니다: " + playerId)))
                 .flatMap(player -> rankingRepository.findByPlayerId(playerId)
                         .switchIfEmpty(Mono.error(new RuntimeException("랭킹을 찾을 수 없습니다: " + playerId)))
@@ -59,11 +58,12 @@ public class RankingService {
         return rankingRepository.findAllByOrderByMaxScoreDesc()
                 .filter(ranking -> !ranking.getIsDeleted())
                 .index()
-                .flatMap(tuple -> rankingRepository.save(
-                        tuple.getT2().toBuilder()
-                                .rankNumber(tuple.getT1() + 1)
-                                .build()
-                ))
+                .flatMap(tuple -> {
+                    Long newRankNumber = tuple.getT1() + 1;
+                    return rankingRepository.save(tuple.getT2().toBuilder()
+                            .rankNumber(newRankNumber)
+                            .build());
+                })
                 .then();
     }
 }

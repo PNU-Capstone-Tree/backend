@@ -2,13 +2,13 @@ package com.tree.tree.config;
 
 import java.time.LocalDateTime;
 import lombok.Getter;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.data.relational.core.mapping.Column;
 
 @Getter
-@Table
+@SuperBuilder(toBuilder = true)
 public abstract class BaseEntity {
 
     @CreatedDate
@@ -19,4 +19,5 @@ public abstract class BaseEntity {
     @Column("update_at")
     private LocalDateTime updateAt;
 
+    protected BaseEntity() {}
 }
