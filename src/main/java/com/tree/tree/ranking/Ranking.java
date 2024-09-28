@@ -3,6 +3,7 @@ package com.tree.tree.ranking;
 import com.tree.tree.config.BaseEntity;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
+import lombok.Generated;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -17,6 +18,7 @@ import org.springframework.data.relational.core.mapping.Table;
 public class Ranking extends BaseEntity {
 
     @Id
+    @Generated
     private Long id;
 
     @NotNull
