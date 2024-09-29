@@ -40,6 +40,7 @@ public class RankingController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('PLAYER')")
     public Mono<Void> createRanking(@RequestBody @Valid final RankingCreateRequest rankingRequest) {
         return rankingService.createRanking(rankingRequest);
     }
