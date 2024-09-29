@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,6 +46,7 @@ public class RankingController {
 
     @PutMapping("/{playerId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole('PLAYER')")
     //todo: 임시. parameter 오류 해결 필요
     public Mono<Void> updateRanking(@PathVariable("playerId") final Long playerId,
                                     @RequestBody @Valid final RankingUpdateRequest request) {
@@ -53,6 +55,7 @@ public class RankingController {
 
     @DeleteMapping("/{playerId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole('ADMIN')")
     public Mono<Void> deleteRanking(@PathVariable final Long playerId) {
         return rankingService.deleteRanking(playerId);
     }

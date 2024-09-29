@@ -40,7 +40,7 @@ public class SecurityConfig {
                 .csrf(CsrfSpec::disable)
                 .formLogin(FormLoginSpec::disable)
                 .authorizeExchange(authorize -> authorize
-                        .pathMatchers("/signUp", "/signIn").permitAll()
+                        .pathMatchers("/signUp", "/signIn", "/rankings").permitAll()
                         .anyExchange().authenticated())
                 .exceptionHandling(exception -> exception
                         .accessDeniedHandler(customAccessDeniedHandler)
