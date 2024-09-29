@@ -44,9 +44,9 @@ public class JwtProvider {
     }
 
     public String createToken(final String userPk, final List<String> roles) {
-        Claims claims = Jwts.claims().setSubject(userPk);
+        final Claims claims = Jwts.claims().setSubject(userPk);
         claims.put(ROLES, roles);
-        Date now = new Date();
+        final Date now = new Date();
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
@@ -56,7 +56,7 @@ public class JwtProvider {
     }
 
     public Mono<Authentication> getAuthentication(final String token) {
-        String username = extractUsername(token);
+        final String username = extractUsername(token);
         return userDetailsService.findByUsername(username)
                 .map(userDetails -> new UsernamePasswordAuthenticationToken(
                         userDetails,
@@ -66,7 +66,7 @@ public class JwtProvider {
     }
 
     public String resolveToken(final ServerWebExchange exchange) {
-        String bearerToken = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
+        final String bearerToken = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
         }
@@ -106,7 +106,7 @@ public class JwtProvider {
         }
     }
 
-    private String extractUsername(String token) {
+    private String extractUsername(final String token) {
         return getClaim(token).getSubject();
     }
 }

@@ -11,7 +11,7 @@ public class ErrorResponse {
     
     private String message;
 
-    public static ErrorResponse from(String message) {
+    public static ErrorResponse from(final String message) {
         return new ErrorResponse(message);
     }
 }

@@ -34,7 +34,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
+    public SecurityWebFilterChain securityWebFilterChain(final ServerHttpSecurity http) {
         return http
                 .httpBasic(HttpBasicSpec::disable)
                 .csrf(CsrfSpec::disable)

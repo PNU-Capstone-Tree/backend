@@ -18,7 +18,7 @@ public class CustomAuthenticationEntryPoint implements ServerAuthenticationEntry
     private final ObjectMapper objectMapper;
 
     @Override
-    public Mono<Void> commence(ServerWebExchange exchange, AuthenticationException e) {
+    public Mono<Void> commence(final ServerWebExchange exchange, AuthenticationException e) {
         ErrorResponse errorResponse = ErrorResponse.from("인증이 필요합니다.");
         byte[] bytes;
 
@@ -30,7 +30,7 @@ public class CustomAuthenticationEntryPoint implements ServerAuthenticationEntry
 
         exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
         exchange.getResponse().getHeaders().setContentType(MediaType.APPLICATION_JSON);
-        DataBuffer buffer = exchange.getResponse().bufferFactory().wrap(bytes);
+        final DataBuffer buffer = exchange.getResponse().bufferFactory().wrap(bytes);
 
         return exchange.getResponse().writeWith(Mono.just(buffer));
     }

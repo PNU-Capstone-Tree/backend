@@ -18,8 +18,8 @@ public class CustomAccessDeniedHandler implements ServerAccessDeniedHandler {
     private final ObjectMapper objectMapper;
 
     @Override
-    public Mono<Void> handle(ServerWebExchange exchange, AccessDeniedException denied) {
-        ErrorResponse errorResponse = ErrorResponse.from("권한이 없습니다.");
+    public Mono<Void> handle(final ServerWebExchange exchange, final AccessDeniedException denied) {
+        final ErrorResponse errorResponse = ErrorResponse.from("권한이 없습니다.");
         byte[] bytes;
 
         try {
@@ -30,7 +30,7 @@ public class CustomAccessDeniedHandler implements ServerAccessDeniedHandler {
 
         exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
         exchange.getResponse().getHeaders().setContentType(MediaType.APPLICATION_JSON);
-        DataBuffer buffer = exchange.getResponse().bufferFactory().wrap(bytes);
+        final DataBuffer buffer = exchange.getResponse().bufferFactory().wrap(bytes);
 
         return exchange.getResponse().writeWith(Mono.just(buffer));
     }

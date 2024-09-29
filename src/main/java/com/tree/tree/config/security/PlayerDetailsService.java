@@ -14,7 +14,7 @@ public class PlayerDetailsService implements ReactiveUserDetailsService {
     private final PlayerRepository playerRepository;
 
     @Override
-    public Mono<UserDetails> findByUsername(String username) {
+    public Mono<UserDetails> findByUsername(final String username) {
         return playerRepository.findByNickName(username)
                 .filter(player -> !player.getIsDeleted())
                 .map(player -> new PlayerDetails(player.getNickName(), player.getPassword(), player.getRoles()));
