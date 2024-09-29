@@ -26,7 +26,7 @@ public class PlayerService {
                         .password(passwordEncoder.encode(signupRequest.getPassword()))
                         .nickName(signupRequest.getNickName())
                         .isDeleted(false)
-                        .roles(List.of("ROLE_PLAYER"))
+                        .roles(List.of("PLAYER"))
                         .build()))
                 .then();
     }
@@ -38,7 +38,7 @@ public class PlayerService {
                     if (!passwordEncoder.matches(signInRequest.getPassword(), player.getPassword())) {
                         return Mono.error(new RuntimeException("비밀번호가 일치하지 않습니다."));
                     }
-                    String token = jwtProvider.createToken(player.getNickName(), List.of("ROLE_PLAYER"));
+                    final String token = jwtProvider.createToken(player.getNickName(), List.of("PLAYER"));
                     return Mono.just(new TokenResponse(token));
                 });
     }

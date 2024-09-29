@@ -17,6 +17,12 @@ public class PlayerDetailsService implements ReactiveUserDetailsService {
     public Mono<UserDetails> findByUsername(final String username) {
         return playerRepository.findByNickName(username)
                 .filter(player -> !player.getIsDeleted())
-                .map(player -> new PlayerDetails(player.getNickName(), player.getPassword(), player.getRoles()));
+                .map(player -> new PlayerDetails(
+                        player.getNickName(),
+                        player.getPassword(),
+                        player.getRoles().stream()
+                                .map(role -> "ROLE_" + role)
+                                .toList()
+                ));
     }
 }
