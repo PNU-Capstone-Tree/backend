@@ -40,11 +40,18 @@ public class RankingService {
         return playerRepository.findById(playerId)
                 .switchIfEmpty(Mono.error(new RuntimeException("플레이어를 찾을 수 없습니다: " + playerId)))
                 .flatMap(player -> rankingRepository.findByPlayerId(playerId)
-                        .switchIfEmpty(Mono.error(new RuntimeException("랭킹을 찾을 수 없습니다: " + playerId)))
                         .flatMap(ranking -> rankingRepository.save(ranking.toBuilder()
                                     .maxScore(request.getMaxScore())
-                                    .build())))
-                .then(reassignRankNumbers());
+                                    .build()))
+                        .switchIfEmpty(
+                                createRanking(RankingCreateRequest.builder()
+                                        .nickName(player.getNickName())
+                                        .maxScore(request.getMaxScore())
+                                        .build())
+                                        .then(Mono.empty())
+                        )
+                )
+                .then(reassignRankNumbers()); // rankNumber 재부여
     }
 
     public Mono<Void> deleteRanking(final Long playerId) {
