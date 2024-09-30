@@ -1,4 +1,4 @@
-package com.tree.tree.config;
+package com.tree.tree.global.base;
 
 public abstract class BaseException extends RuntimeException {
 

@@ -1,5 +1,6 @@
-package com.tree.tree.config;
+package com.tree.tree.global.config;
 
+import com.tree.tree.global.config.R2dbcConfig;
 import io.r2dbc.spi.ConnectionFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.annotation.Qualifier;

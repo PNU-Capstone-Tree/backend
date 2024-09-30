@@ -1,7 +1,6 @@
-package com.tree.tree.config;
+package com.tree.tree.global.config;
 
 import io.r2dbc.spi.ConnectionFactory;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;

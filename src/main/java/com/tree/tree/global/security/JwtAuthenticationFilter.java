@@ -1,4 +1,4 @@
-package com.tree.tree.config.security;
+package com.tree.tree.global.security;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;

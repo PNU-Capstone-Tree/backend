@@ -1,6 +1,6 @@
 package com.tree.tree.ranking;
 
-import com.tree.tree.config.BaseEntity;
+import com.tree.tree.global.base.BaseEntity;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Generated;

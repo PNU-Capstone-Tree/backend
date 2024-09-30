@@ -1,6 +1,6 @@
 package com.tree.tree.player.exception;
 
-import com.tree.tree.config.BaseExceptionType;
+import com.tree.tree.global.base.BaseExceptionType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 

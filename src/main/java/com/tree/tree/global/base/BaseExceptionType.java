@@ -1,4 +1,4 @@
-package com.tree.tree.config;
+package com.tree.tree.global.base;
 
 import org.springframework.http.HttpStatus;
 

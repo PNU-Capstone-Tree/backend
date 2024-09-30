@@ -1,7 +1,7 @@
 package com.tree.tree.ranking.exception;
 
-import com.tree.tree.config.BaseException;
-import com.tree.tree.config.BaseExceptionType;
+import com.tree.tree.global.base.BaseException;
+import com.tree.tree.global.base.BaseExceptionType;
 
 public class RankingException extends BaseException {
 

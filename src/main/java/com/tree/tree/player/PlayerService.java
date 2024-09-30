@@ -1,6 +1,6 @@
 package com.tree.tree.player;
 
-import com.tree.tree.config.security.JwtProvider;
+import com.tree.tree.global.security.JwtProvider;
 import com.tree.tree.player.dto.request.SignInRequest;
 import com.tree.tree.player.dto.request.SignUpRequest;
 import com.tree.tree.player.dto.response.TokenResponse;

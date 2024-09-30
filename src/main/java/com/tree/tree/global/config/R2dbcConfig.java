@@ -1,4 +1,4 @@
-package com.tree.tree.config;
+package com.tree.tree.global.config;
 
 import io.r2dbc.pool.ConnectionPool;
 import io.r2dbc.pool.ConnectionPoolConfiguration;

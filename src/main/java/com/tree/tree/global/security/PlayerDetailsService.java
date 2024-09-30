@@ -1,4 +1,4 @@
-package com.tree.tree.config.security;
+package com.tree.tree.global.security;
 
 import com.tree.tree.player.repository.PlayerRepository;
 import lombok.RequiredArgsConstructor;

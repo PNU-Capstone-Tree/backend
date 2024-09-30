@@ -1,7 +1,7 @@
 package com.tree.tree.player;
 
 
-import com.tree.tree.config.BaseEntity;
+import com.tree.tree.global.base.BaseEntity;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import lombok.AccessLevel;
