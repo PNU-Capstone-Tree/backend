@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RankingUpdateRequest {
+
     @NotNull(message = "점수를 입력해주세요.")
     @Positive
     private Long maxScore;
