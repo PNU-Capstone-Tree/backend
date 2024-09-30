@@ -18,6 +18,12 @@ import org.springframework.data.relational.core.mapping.Table;
 @Table("player")
 public class Player extends BaseEntity {
 
+    public static final String NICKNAME_INVALID = "닉네임은 6~20자 한글, 영어만 가능합니다.";
+    public static final String NICKNAME_REGEX = "^[a-zA-Z가-힣]{6,20}";
+
+    public static final String PASSWORD_INVALID = "비밀번호는 8~16자여야 하고 영어, 숫자, 특수문자가 포함되어야 합니다.";
+    public static final String PASSWORD_REGEX = "^(?=.*?[A-Za-z])(?=.*?\\d)(?=.*?[!@#$%^&*(),.-]).{8,16}$";
+
     @Id
     @Generated
     private Long id;
