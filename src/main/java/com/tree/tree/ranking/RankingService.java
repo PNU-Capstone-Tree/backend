@@ -1,9 +1,14 @@
 package com.tree.tree.ranking;
 
+import static com.tree.tree.player.exception.PlayerExceptionType.NOT_FOUND_PLAYER;
+import static com.tree.tree.ranking.exception.RankingExceptionType.NOT_FOUND_RANKING;
+
+import com.tree.tree.player.exception.PlayerException;
 import com.tree.tree.player.repository.PlayerRepository;
 import com.tree.tree.ranking.dto.request.RankingCreateRequest;
 import com.tree.tree.ranking.dto.request.RankingUpdateRequest;
 import com.tree.tree.ranking.dto.response.RankingResponse;
+import com.tree.tree.ranking.exception.RankingException;
 import com.tree.tree.ranking.repository.RankingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -26,8 +31,7 @@ public class RankingService {
 
     public Mono<Void> createRanking(final RankingCreateRequest rankingRequest) {
         return playerRepository.findByNickName(rankingRequest.getNickName())
-                //todo: error 처리
-                .switchIfEmpty(Mono.error(new RuntimeException("플레이어를 찾을 수 없습니다: " + rankingRequest.getNickName())))
+                .switchIfEmpty(Mono.error(() -> new PlayerException(NOT_FOUND_PLAYER)))
                 .flatMap(player -> rankingRepository.save(Ranking.builder()
                         .playerId(player.getId())
                         .maxScore(rankingRequest.getMaxScore())
@@ -38,11 +42,11 @@ public class RankingService {
 
     public Mono<Void> updateRanking(final Long playerId, final RankingUpdateRequest request) {
         return playerRepository.findById(playerId)
-                .switchIfEmpty(Mono.error(new RuntimeException("플레이어를 찾을 수 없습니다: " + playerId)))
+                .switchIfEmpty(Mono.error(() -> new PlayerException(NOT_FOUND_PLAYER)))
                 .flatMap(player -> rankingRepository.findByPlayerId(playerId)
                         .flatMap(ranking -> rankingRepository.save(ranking.toBuilder()
-                                    .maxScore(request.getMaxScore())
-                                    .build()))
+                                .maxScore(request.getMaxScore())
+                                .build()))
                         .switchIfEmpty(
                                 createRanking(RankingCreateRequest.builder()
                                         .nickName(player.getNickName())
@@ -56,7 +60,7 @@ public class RankingService {
 
     public Mono<Void> deleteRanking(final Long playerId) {
         return rankingRepository.findByPlayerId(playerId)
-                .switchIfEmpty(Mono.error(new RuntimeException("랭킹을 찾을 수 없습니다: " + playerId)))
+                .switchIfEmpty(Mono.error(() -> new RankingException(NOT_FOUND_RANKING)))
                 .flatMap(rankingRepository::delete)
                 .then(reassignRankNumbers());
     }
