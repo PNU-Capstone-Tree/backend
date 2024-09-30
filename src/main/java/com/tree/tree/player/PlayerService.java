@@ -1,9 +1,14 @@
 package com.tree.tree.player;
 
+import static com.tree.tree.player.exception.PlayerExceptionType.ALREADY_EXIST_NICKNAME;
+import static com.tree.tree.player.exception.PlayerExceptionType.CANNOT_MATCH_PASSWORD;
+import static com.tree.tree.player.exception.PlayerExceptionType.NOT_FOUND_NICKNAME;
+
 import com.tree.tree.global.security.JwtProvider;
 import com.tree.tree.player.dto.request.SignInRequest;
 import com.tree.tree.player.dto.request.SignUpRequest;
 import com.tree.tree.player.dto.response.TokenResponse;
+import com.tree.tree.player.exception.PlayerException;
 import com.tree.tree.player.repository.PlayerRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +26,7 @@ public class PlayerService {
 
     public Mono<Void> signUp(final SignUpRequest signupRequest) {
         return playerRepository.findByNickName(signupRequest.getNickName())
-                .flatMap(player -> Mono.error(new RuntimeException("이미 존재하는 닉네임입니다: " + signupRequest.getNickName())))
+                .flatMap(player -> Mono.error(() -> new PlayerException(ALREADY_EXIST_NICKNAME)))
                 .switchIfEmpty(playerRepository.save(Player.builder()
                         .password(passwordEncoder.encode(signupRequest.getPassword()))
                         .nickName(signupRequest.getNickName())
@@ -33,10 +38,10 @@ public class PlayerService {
 
     public Mono<TokenResponse> signIn(final SignInRequest signInRequest) {
         return playerRepository.findByNickName(signInRequest.getNickName())
-                .switchIfEmpty(Mono.error(new RuntimeException("존재하지 않는 닉네임입니다.")))
+                .switchIfEmpty(Mono.error(() -> new PlayerException(NOT_FOUND_NICKNAME)))
                 .flatMap(player -> {
                     if (!passwordEncoder.matches(signInRequest.getPassword(), player.getPassword())) {
-                        return Mono.error(new RuntimeException("비밀번호가 일치하지 않습니다."));
+                        return Mono.error(() -> new PlayerException(CANNOT_MATCH_PASSWORD));
                     }
                     final String token = jwtProvider.createToken(player.getNickName(), List.of("PLAYER"));
                     return Mono.just(new TokenResponse(token));
