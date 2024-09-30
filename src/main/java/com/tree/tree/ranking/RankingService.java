@@ -42,8 +42,7 @@ public class RankingService {
                 )
                 .then(reassignRankNumbers());
     }
-
-
+    
     public Mono<Void> deleteRanking(final Long playerId) {
         return rankingRepository.findByPlayerId(playerId)
                 .switchIfEmpty(Mono.error(() -> new RankingException(NOT_FOUND_RANKING)))
