@@ -1,6 +1,7 @@
 package com.tree.tree.ranking;
 
 import static com.tree.tree.player.exception.PlayerExceptionType.NOT_FOUND_PLAYER;
+import static com.tree.tree.ranking.exception.RankingExceptionType.CANNOT_UPDATE_RANKING;
 import static com.tree.tree.ranking.exception.RankingExceptionType.NOT_FOUND_RANKING;
 
 import com.tree.tree.player.Player;
@@ -34,15 +35,15 @@ public class RankingService {
                 .then(reassignRankNumbers()); // rankNumber 재부여
     }
 
-    public Mono<Void> updateRanking(final Long playerId, final RankingUpdateRequest request) {
-        return findPlayerById(playerId)
+    public Mono<Void> updateRanking(final Long playerId, final RankingUpdateRequest request, final Player tokenPlayer) {
+        return validateAndGetPlayer(playerId, tokenPlayer)
                 .flatMap(player -> rankingRepository.findByPlayerId(playerId)
                         .flatMap(ranking -> updateExistingRanking(ranking, request))
                         .switchIfEmpty(createNewRanking(player, request))
                 )
                 .then(reassignRankNumbers());
     }
-    
+
     public Mono<Void> deleteRanking(final Long playerId) {
         return rankingRepository.findByPlayerId(playerId)
                 .switchIfEmpty(Mono.error(() -> new RankingException(NOT_FOUND_RANKING)))
@@ -105,5 +106,19 @@ public class RankingService {
     private Mono<RankingResponse> mapToRankingResponse(final Ranking ranking) {
         return playerRepository.findById(ranking.getPlayerId())
                 .map(player -> RankingResponse.from(ranking, player.getNickName()));
+    }
+
+    private Mono<Player> validateAndGetPlayer(final Long playerId, final Player tokenPlayer) {
+        if (!tokenPlayer.getId().equals(playerId)) {
+            return Mono.error(() -> new RankingException(CANNOT_UPDATE_RANKING));
+        }
+
+        return findPlayerById(playerId)
+                .flatMap(player -> {
+                    if (!tokenPlayer.getNickName().equals(player.getNickName())) {
+                        return Mono.error(() -> new RankingException(CANNOT_UPDATE_RANKING));
+                    }
+                    return Mono.just(player);
+                });
     }
 }

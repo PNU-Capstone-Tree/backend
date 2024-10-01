@@ -1,5 +1,7 @@
 package com.tree.tree.ranking;
 
+import com.tree.tree.global.security.annotation.LoginPlayer;
+import com.tree.tree.player.Player;
 import com.tree.tree.ranking.dto.request.RankingCreateRequest;
 import com.tree.tree.ranking.dto.request.RankingUpdateRequest;
 import com.tree.tree.ranking.dto.response.RankingResponse;
@@ -49,8 +51,9 @@ public class RankingController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasRole('PLAYER')")
     public Mono<Void> updateRanking(@PathVariable final Long playerId,
-                                    @RequestBody @Valid final RankingUpdateRequest request) {
-        return rankingService.updateRanking(playerId, request);
+                                    @RequestBody @Valid final RankingUpdateRequest request,
+                                    @LoginPlayer final Player tokenPlayer) {
+        return rankingService.updateRanking(playerId, request, tokenPlayer);
     }
 
     @DeleteMapping("/{playerId}")
