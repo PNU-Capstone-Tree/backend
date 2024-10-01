@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PlayerDetails implements UserDetails {
 
+    private final Long playerId;
     private final String nickName;
     private final String password;
     private final List<String> roles;
@@ -20,6 +21,10 @@ public class PlayerDetails implements UserDetails {
         return roles.stream()
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
+    }
+
+    public Long getPlayerId() {
+        return playerId;
     }
 
     @Override

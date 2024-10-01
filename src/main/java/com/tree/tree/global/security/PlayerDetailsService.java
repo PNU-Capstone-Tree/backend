@@ -18,6 +18,7 @@ public class PlayerDetailsService implements ReactiveUserDetailsService {
         return playerRepository.findByNickName(username)
                 .filter(player -> !player.getIsDeleted())
                 .map(player -> new PlayerDetails(
+                        player.getId(),
                         player.getNickName(),
                         player.getPassword(),
                         player.getRoles().stream()
