@@ -2,20 +2,22 @@ player-db:
   host: localhost
   port: 5432
   database: player_db
-  username: name
-  password: pw
+  username: username
+  password: password
 
 ranking-db:
   host: localhost
   port: 5432
   database: ranking_db
-  username: name
-  password: pw
+  username: username
+  password: password
 
 spring:
   r2dbc:
     pool:
       enabled: false
+  jwt:
+    secret: "secret"
 
 logging:
   level:
