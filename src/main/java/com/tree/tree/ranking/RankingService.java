@@ -52,7 +52,7 @@ public class RankingService {
     }
 
     private Mono<Void> reassignRankNumbers() {
-        return rankingRepository.findAllByOrderByMaxScoreDesc()
+        return rankingRepository.findAllByOrderByMaxScoreAsc()
                 .filter(ranking -> !ranking.getIsDeleted())
                 .index()
                 .flatMap(tuple -> {

@@ -8,6 +8,6 @@ import reactor.core.publisher.Mono;
 
 public interface RankingRepository extends ReactiveCrudRepository<Ranking, Long> {
     Flux<Ranking> findAllByOrderByRankNumberAsc(Pageable pageable);
-    Flux<Ranking> findAllByOrderByMaxScoreDesc();
+    Flux<Ranking> findAllByOrderByMaxScoreAsc();
     Mono<Ranking> findByPlayerId(final Long playerId);
 }
