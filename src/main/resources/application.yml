@@ -1,25 +1,36 @@
 player-db:
-  host: localhost
+  host: postgres-player-service
   port: 5432
   database: player_db
-  username: username
-  password: password
+  username: tree
+  password: tree
 
 ranking-db:
-  host: localhost
-  port: 5432
+  host: postgres-ranking-service
+  port: 5433
   database: ranking_db
-  username: username
-  password: password
+  username: tree
+  password: tree
 
 spring:
   r2dbc:
     pool:
       enabled: false
+  datasource:
+    player-db:
+      url: jdbc:postgresql://#{player-db.host}:#{player-db.port}/#{player-db.database}
+      username: #{player-db.username}
+      password: #{player-db.password}
+    ranking-db:
+      url: jdbc:postgresql://#{ranking-db.host}:#{ranking-db.port}/#{ranking-db.database}
+      username: #{ranking-db.username}
+      password: #{ranking-db.password}
   jwt:
-    secret: "secret"
+    secret: "VGhpcyBJc0EzMjBCeXRlTG9uZ1NlY3JldEtleUZvclBXVFNBdXRoMTIzNDU2Nzg5MA=="
 
 logging:
   level:
     io.r2dbc: DEBUG
     org.springframework.r2dbc: DEBUG
+    root: INFO
+    com.example.myapp: DEBUG
