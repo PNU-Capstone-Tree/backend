@@ -13,6 +13,9 @@ ranking-db:
   password: tree
 
 spring:
+  config:
+    import: "classpath:application-secret.yml"
+
   r2dbc:
     pool:
       enabled: false
@@ -25,8 +28,6 @@ spring:
       url: jdbc:postgresql://#{ranking-db.host}:#{ranking-db.port}/#{ranking-db.database}
       username: #{ranking-db.username}
       password: #{ranking-db.password}
-  jwt:
-    secret: "VGhpcyBJc0EzMjBCeXRlTG9uZ1NlY3JldEtleUZvclBXVFNBdXRoMTIzNDU2Nzg5MA=="
 
 logging:
   level:
