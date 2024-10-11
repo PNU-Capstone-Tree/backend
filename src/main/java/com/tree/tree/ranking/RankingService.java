@@ -85,7 +85,7 @@ public class RankingService {
     }
 
     private Mono<Ranking> updateExistingRanking(final Ranking ranking, final RankingUpdateRequest request) {
-        if (request.getMaxScore() > ranking.getMaxScore()) {
+        if (request.getMaxScore() < ranking.getMaxScore()) {
             Ranking updatedRanking = ranking.toBuilder()
                     .maxScore(request.getMaxScore())
                     .build();
