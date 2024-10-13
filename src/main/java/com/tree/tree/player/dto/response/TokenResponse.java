@@ -9,5 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TokenResponse {
 
+    private Long playerId;
     private String token;
 }

@@ -44,7 +44,7 @@ public class PlayerService {
                         return Mono.error(() -> new PlayerException(CANNOT_MATCH_PASSWORD));
                     }
                     final String token = jwtProvider.createToken(player.getNickName(), List.of("PLAYER"));
-                    return Mono.just(new TokenResponse(token));
+                    return Mono.just(new TokenResponse(player.getId(), token));
                 });
     }
 }
