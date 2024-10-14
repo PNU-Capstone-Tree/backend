@@ -42,6 +42,7 @@ public class SecurityConfig {
                 .formLogin(FormLoginSpec::disable)
                 .authorizeExchange(authorize -> authorize
                         .pathMatchers("/signUp", "/signIn", "/rankings").permitAll()
+                        .pathMatchers("/rankings/**").authenticated()
                         .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .anyExchange().authenticated())
                 .exceptionHandling(exception -> exception
