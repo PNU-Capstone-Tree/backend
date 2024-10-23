@@ -29,18 +29,16 @@ public class RankingService {
                 .flatMap(this::mapToRankingResponse);
     }
 
-    public Mono<Void> createRanking(final RankingCreateRequest rankingRequest) {
-        return findPlayerByNickName(rankingRequest.getNickName())
-                .flatMap(player -> saveNewRanking(player, rankingRequest))
-                .then(reassignRankNumbers()); // rankNumber 재부여
+    public Mono<Void> createRanking(final RankingCreateRequest rankingRequest, final Player tokenPlayer) {
+        return validateAndGetPlayerNickName(rankingRequest.getNickName(), tokenPlayer)
+                .flatMap(player -> processRankingCreation(player, rankingRequest))
+                .then(reassignRankNumbers());
     }
 
     public Mono<Void> updateRanking(final Long playerId, final RankingUpdateRequest request, final Player tokenPlayer) {
         return validateAndGetPlayer(playerId, tokenPlayer)
                 .flatMap(player -> rankingRepository.findByPlayerId(playerId)
-                        .flatMap(ranking -> updateExistingRanking(ranking, request))
-                        .switchIfEmpty(createNewRanking(player, request))
-                )
+                        .flatMap(ranking -> updateExistingRanking(ranking, request)))
                 .then(reassignRankNumbers());
     }
 
@@ -49,6 +47,33 @@ public class RankingService {
                 .switchIfEmpty(Mono.error(() -> new RankingException(NOT_FOUND_RANKING)))
                 .flatMap(rankingRepository::delete)
                 .then(reassignRankNumbers());
+    }
+
+    private Mono<Player> validateAndGetPlayerNickName(final String nickName, final Player tokenPlayer) {
+        return findPlayerByNickName(nickName)
+                .flatMap(player -> {
+                    if (!player.getId().equals(tokenPlayer.getId())) {
+                        return Mono.error(() -> new RankingException(CANNOT_UPDATE_RANKING));
+                    }
+                    return Mono.just(player);
+                });
+    }
+
+    private Mono<Ranking> processRankingCreation(final Player player, final RankingCreateRequest rankingRequest) {
+        return rankingRepository.findByPlayerIdAndIsDeletedFalse(player.getId())
+                .flatMap(existingRanking -> {
+                    if (rankingRequest.getMaxScore() < existingRanking.getMaxScore()) {
+                        return changeExistingRankingAsDeleted(existingRanking)
+                                .then(saveNewRanking(player, rankingRequest));
+                    } else return Mono.just(existingRanking);})
+                .switchIfEmpty(saveNewRanking(player, rankingRequest));
+    }
+
+    private Mono<Ranking> changeExistingRankingAsDeleted(final Ranking existingRanking) {
+        Ranking updatedExistingRanking = existingRanking.toBuilder()
+                .isDeleted(true)
+                .build();
+        return rankingRepository.save(updatedExistingRanking);
     }
 
     private Mono<Void> reassignRankNumbers() {
@@ -93,14 +118,6 @@ public class RankingService {
         } else {
             return Mono.just(ranking);
         }
-    }
-
-    private Mono<Ranking> createNewRanking(final Player player, final RankingUpdateRequest request) {
-        RankingCreateRequest createRequest = RankingCreateRequest.builder()
-                .nickName(player.getNickName())
-                .maxScore(request.getMaxScore())
-                .build();
-        return saveNewRanking(player, createRequest);
     }
 
     private Mono<RankingResponse> mapToRankingResponse(final Ranking ranking) {

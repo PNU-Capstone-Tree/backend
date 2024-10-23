@@ -43,8 +43,9 @@ public class RankingController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('PLAYER')")
-    public Mono<Void> createRanking(@RequestBody @Valid final RankingCreateRequest rankingRequest) {
-        return rankingService.createRanking(rankingRequest);
+    public Mono<Void> createRanking(@RequestBody @Valid final RankingCreateRequest rankingRequest,
+                                    @LoginPlayer Player tokenPlayer) {
+        return rankingService.createRanking(rankingRequest, tokenPlayer);
     }
 
     @PutMapping("/{playerId}")
