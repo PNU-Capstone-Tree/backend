@@ -1,7 +1,8 @@
-package com.tree.tree.ranking;
+package com.tree.tree.ranking.controller;
 
 import com.tree.tree.global.security.annotation.LoginPlayer;
 import com.tree.tree.player.Player;
+import com.tree.tree.ranking.application.RankingService;
 import com.tree.tree.ranking.dto.request.RankingCreateRequest;
 import com.tree.tree.ranking.dto.request.RankingUpdateRequest;
 import com.tree.tree.ranking.dto.response.RankingResponse;

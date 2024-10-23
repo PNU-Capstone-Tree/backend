@@ -1,12 +1,10 @@
-package com.tree.tree.ranking;
+package com.tree.tree.ranking.application;
 
-import static com.tree.tree.player.exception.PlayerExceptionType.NOT_FOUND_PLAYER;
-import static com.tree.tree.ranking.exception.RankingExceptionType.CANNOT_UPDATE_RANKING;
 import static com.tree.tree.ranking.exception.RankingExceptionType.NOT_FOUND_RANKING;
 
 import com.tree.tree.player.Player;
-import com.tree.tree.player.exception.PlayerException;
 import com.tree.tree.player.repository.PlayerRepository;
+import com.tree.tree.ranking.Ranking;
 import com.tree.tree.ranking.dto.request.RankingCreateRequest;
 import com.tree.tree.ranking.dto.request.RankingUpdateRequest;
 import com.tree.tree.ranking.dto.response.RankingResponse;
@@ -24,19 +22,21 @@ public class RankingService {
     private final RankingRepository rankingRepository;
     private final PlayerRepository playerRepository;
 
+    private final RankingValidateAndFindService rankingValidateAndFindService;
+
     public Flux<RankingResponse> getAllRankings(final int page, final int size) {
         return rankingRepository.findAllByOrderByRankNumberAsc(PageRequest.of(page, size))
                 .flatMap(this::mapToRankingResponse);
     }
 
     public Mono<Void> createRanking(final RankingCreateRequest rankingRequest, final Player tokenPlayer) {
-        return validateAndGetPlayerNickName(rankingRequest.getNickName(), tokenPlayer)
+        return rankingValidateAndFindService.validateAndGetPlayerNickName(rankingRequest.getNickName(), tokenPlayer)
                 .flatMap(player -> processRankingCreation(player, rankingRequest))
                 .then(reassignRankNumbers());
     }
 
     public Mono<Void> updateRanking(final Long playerId, final RankingUpdateRequest request, final Player tokenPlayer) {
-        return validateAndGetPlayer(playerId, tokenPlayer)
+        return rankingValidateAndFindService.validateAndGetPlayer(playerId, tokenPlayer)
                 .flatMap(player -> rankingRepository.findByPlayerId(playerId)
                         .flatMap(ranking -> updateExistingRanking(ranking, request)))
                 .then(reassignRankNumbers());
@@ -47,16 +47,6 @@ public class RankingService {
                 .switchIfEmpty(Mono.error(() -> new RankingException(NOT_FOUND_RANKING)))
                 .flatMap(rankingRepository::delete)
                 .then(reassignRankNumbers());
-    }
-
-    private Mono<Player> validateAndGetPlayerNickName(final String nickName, final Player tokenPlayer) {
-        return findPlayerByNickName(nickName)
-                .flatMap(player -> {
-                    if (!player.getId().equals(tokenPlayer.getId())) {
-                        return Mono.error(() -> new RankingException(CANNOT_UPDATE_RANKING));
-                    }
-                    return Mono.just(player);
-                });
     }
 
     private Mono<Ranking> processRankingCreation(final Player player, final RankingCreateRequest rankingRequest) {
@@ -89,16 +79,6 @@ public class RankingService {
                 .then();
     }
 
-    private Mono<Player> findPlayerByNickName(final String nickName) {
-        return playerRepository.findByNickName(nickName)
-                .switchIfEmpty(Mono.error(() -> new PlayerException(NOT_FOUND_PLAYER)));
-    }
-
-    private Mono<Player> findPlayerById(final Long playerId) {
-        return playerRepository.findById(playerId)
-                .switchIfEmpty(Mono.error(() -> new PlayerException(NOT_FOUND_PLAYER)));
-    }
-
     private Mono<Ranking> saveNewRanking(final Player player, final RankingCreateRequest rankingRequest) {
         final Ranking ranking = Ranking.builder()
                 .playerId(player.getId())
@@ -123,19 +103,5 @@ public class RankingService {
     private Mono<RankingResponse> mapToRankingResponse(final Ranking ranking) {
         return playerRepository.findById(ranking.getPlayerId())
                 .map(player -> RankingResponse.from(ranking, player.getNickName()));
-    }
-
-    private Mono<Player> validateAndGetPlayer(final Long playerId, final Player tokenPlayer) {
-        if (!tokenPlayer.getId().equals(playerId)) {
-            return Mono.error(() -> new RankingException(CANNOT_UPDATE_RANKING));
-        }
-
-        return findPlayerById(playerId)
-                .flatMap(player -> {
-                    if (!tokenPlayer.getNickName().equals(player.getNickName())) {
-                        return Mono.error(() -> new RankingException(CANNOT_UPDATE_RANKING));
-                    }
-                    return Mono.just(player);
-                });
     }
 }
