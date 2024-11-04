@@ -19,15 +19,6 @@ spring:
   r2dbc:
     pool:
       enabled: false
-  datasource:
-    player-db:
-      url: jdbc:postgresql://#{player-db.host}:#{player-db.port}/#{player-db.database}
-      username: #{player-db.username}
-      password: #{player-db.password}
-    ranking-db:
-      url: jdbc:postgresql://#{ranking-db.host}:#{ranking-db.port}/#{ranking-db.database}
-      username: #{ranking-db.username}
-      password: #{ranking-db.password}
 
 logging:
   level:
